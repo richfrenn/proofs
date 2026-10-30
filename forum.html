@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROOFS // Reception Archive Board</title>
+<meta name="description" content="Reader forum for Proofs, a novel by R. Frenneaux.">
+<style>
+:root{
+  --bg:#080b09; --panel:#0d120f; --panel2:#111814; --line:#1f2a23; --line2:#2b3a30;
+  --ink:#c9d4c5; --dim:#7d8a80; --faint:#4d5a51;
+  --acc:#6fe39a; --acc2:#3a7a52; --warn:#e0b04a; --red:#d56a5a;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"Liberation Mono","Courier New","Noto Sans Mono CJK SC",monospace;
+  --serif:"Iowan Old Style",Georgia,"Times New Roman","Noto Serif SC","Songti SC",serif;
+}
+html[data-theme="amber"]{ --acc:#ffb347; --acc2:#8a5a1c; --ink:#e3d6bf; --dim:#9a8b74; --faint:#5e5444; --line:#2a2318; --line2:#3a3020; --panel:#110e09; --panel2:#17130c; --bg:#0b0906; }
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:var(--mono);font-size:14px;line-height:1.55}
+a{color:var(--acc);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input,textarea,select{font:inherit;color:inherit}
+::selection{background:var(--acc);color:var(--bg)}
+/* scanlines + glow, subtle */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:99;
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+@media (prefers-reduced-motion:no-preference){ .blink{animation:blink 1.1s steps(1) infinite} @keyframes blink{50%{opacity:0}} }
+
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:1px solid var(--line2);background:linear-gradient(var(--panel2),var(--panel))}
+.top .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding-top:18px;padding-bottom:12px;flex-wrap:wrap}
+.logo{color:var(--acc);font-size:15px;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 0 8px color-mix(in srgb,var(--acc) 40%,transparent)}
+.logo small{display:block;color:var(--dim);letter-spacing:.08em;font-size:11px;text-shadow:none;margin-top:2px}
+.tools{display:flex;gap:6px;flex-wrap:wrap;font-size:12px}
+.btn{background:transparent;border:1px solid var(--line2);color:var(--dim);padding:4px 9px;cursor:pointer}
+.btn:hover,.btn.on{color:var(--acc);border-color:var(--acc2)}
+.btn.primary{color:var(--bg);background:var(--acc);border-color:var(--acc)}
+.btn.primary:hover{filter:brightness(1.1)}
+.statusbar{border-bottom:1px solid var(--line);font-size:11px;color:var(--faint);background:var(--panel)}
+.statusbar .wrap{display:flex;justify-content:space-between;gap:12px;padding-top:5px;padding-bottom:5px;flex-wrap:wrap}
+.statusbar b{color:var(--dim);font-weight:normal}
+.crumbs{margin:18px 0 12px;font-size:12px;color:var(--dim)}
+.crumbs a{color:var(--dim)} .crumbs a:hover{color:var(--acc)}
+.crumbs span{color:var(--faint);margin:0 6px}
+
+/* notice */
+.notice{border:1px dashed var(--line2);color:var(--dim);padding:8px 12px;font-size:12px;margin:14px 0}
+.notice b{color:var(--warn);font-weight:normal}
+
+/* board tables */
+.tbl{width:100%;border-collapse:collapse;border:1px solid var(--line2);margin-bottom:22px;background:var(--panel)}
+.tbl caption{text-align:left;padding:7px 10px;background:var(--panel2);border:1px solid var(--line2);border-bottom:0;color:var(--acc);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.tbl th{font-weight:normal;text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:6px 10px;border-bottom:1px solid var(--line2)}
+.tbl td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr:hover td{background:color-mix(in srgb,var(--acc) 4%,transparent)}
+.tbl .num{text-align:right;color:var(--dim);white-space:nowrap;width:70px}
+.tbl .last{color:var(--dim);font-size:12px;width:200px}
+.code{color:var(--faint);font-size:11px;margin-right:8px}
+.bname{font-size:15px}
+.bdesc{color:var(--dim);font-size:12px;margin-top:2px}
+.tag{display:inline-block;font-size:10px;letter-spacing:.1em;border:1px solid var(--line2);color:var(--dim);padding:0 5px;margin-left:6px;vertical-align:1px;text-transform:uppercase}
+.tag.new{color:var(--bg);background:var(--acc);border-color:var(--acc)}
+.tag.lock{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,transparent)}
+.tag.pin{color:var(--acc);border-color:var(--acc2)}
+tr.locked td{color:var(--faint)}
+tr.locked a{color:var(--faint);pointer-events:none}
+.count{color:var(--warn);font-variant-numeric:tabular-nums}
+
+/* thread */
+.thead{border:1px solid var(--line2);background:var(--panel2);padding:12px 14px;margin-bottom:0}
+.thead h1{font-size:18px;font-weight:normal;margin:0;color:var(--ink)}
+.thead .meta{font-size:12px;color:var(--dim);margin-top:4px}
+.post{display:grid;grid-template-columns:170px 1fr;border:1px solid var(--line2);border-top:0;background:var(--panel)}
+.post .who{border-right:1px solid var(--line);padding:12px;font-size:12px;color:var(--dim);background:var(--panel2)}
+.post .who .h{color:var(--acc);font-size:13px;word-break:break-word}
+.post .who .rank{margin-top:4px;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.post .body{padding:12px 14px;min-width:0}
+.post .phead{display:flex;justify-content:space-between;font-size:11px;color:var(--faint);border-bottom:1px dotted var(--line2);padding-bottom:6px;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.post .phead a{color:var(--faint)}
+.post .txt{white-space:normal;word-wrap:break-word}
+.post .txt p{margin:0 0 .8em}
+.post .txt blockquote{margin:0 0 .8em;border-left:2px solid var(--acc2);padding:2px 10px;color:var(--dim)}
+.post .actions{margin-top:8px;font-size:11px}
+.post .actions button{background:none;border:0;color:var(--faint);cursor:pointer;padding:0;margin-right:12px}
+.post .actions button:hover{color:var(--acc)}
+.redact{background:var(--ink);color:transparent;cursor:pointer;padding:0 2px;border-radius:1px}
+.redact.open{background:transparent;color:var(--warn);outline:1px dashed var(--warn)}
+.post.admin .who .h{color:var(--warn)}
+
+/* embedded reader */
+.dossier{border:1px solid var(--line2);border-top:0;background:var(--panel)}
+.dossier .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12px;color:var(--dim);flex-wrap:wrap}
+.dossier .bar b{color:var(--acc);font-weight:normal}
+.dossier audio{width:100%;display:block;height:34px;filter:invert(.9) hue-rotate(180deg) saturate(.4)}
+html[data-theme="amber"] .dossier audio{filter:invert(.9) sepia(.6) hue-rotate(-10deg)}
+.page{padding:28px 18px;max-height:none;overflow:hidden;position:relative;background:#0f1411;transition:max-height .3s}
+html[data-theme="amber"] .page{background:#14110b}
+.page.clipped{max-height:340px}
+.page.clipped::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,var(--panel))}
+.prose{max-width:640px;margin:0 auto;font-family:var(--serif);font-size:18px;line-height:1.75;color:#ddd6c8}
+html[data-theme="amber"] .prose{color:#e8dcc4}
+.prose p{margin:0;text-indent:1.4em}
+.prose > p:first-of-type,.prose .brk + p,.prose .set + p,.prose .doc + p:not(.doc){text-indent:0}
+.prose .doc{text-indent:0;margin:.5em 1.4em;color:#bfb8aa}
+.prose .set{text-indent:0;text-align:center;margin:1em 0}
+.prose .brk{text-indent:0;text-align:center;margin:1.2em 0;color:var(--dim)}
+.prose h2{font-family:var(--mono);font-weight:normal;font-size:13px;letter-spacing:.3em;text-transform:uppercase;text-align:center;color:var(--acc);margin:0 0 22px}
+.prose .epi{text-align:center;color:#9a958b;font-size:15px;margin:0 auto 28px;max-width:30em}
+.prose .epi p{text-indent:0;margin:0 0 4px}
+.prose .partcard{text-align:center;border:1px solid var(--line2);padding:16px;margin-bottom:30px;font-family:var(--mono);font-size:12px;color:var(--dim)}
+.prose .partcard b{display:block;color:var(--acc);font-weight:normal;font-size:16px;letter-spacing:.2em;margin:4px 0}
+html[lang="zh-CN"] .prose{font-size:17px;line-height:1.95;text-align:justify}
+html[lang="zh-CN"] .prose p{text-indent:2em}
+html[lang="zh-CN"] .prose .kai{font-family:"Kaiti SC","STKaiti","KaiTi",var(--serif)}
+.expand{display:block;width:100%;border:0;border-top:1px solid var(--line);background:var(--panel2);color:var(--acc);padding:8px;cursor:pointer;letter-spacing:.15em;font-size:12px}
+.classified{border:1px solid var(--line2);border-top:0;background:var(--panel);padding:40px 16px;text-align:center}
+.classified .stamp{display:inline-block;border:2px solid var(--red);color:var(--red);padding:4px 14px;letter-spacing:.3em;transform:rotate(-3deg);font-size:15px}
+.classified .cd{font-size:22px;color:var(--warn);margin-top:16px;font-variant-numeric:tabular-nums}
+
+/* composer */
+.composer{border:1px solid var(--line2);background:var(--panel);margin:22px 0 40px}
+.composer .hd{padding:7px 12px;background:var(--panel2);border-bottom:1px solid var(--line2);color:var(--acc);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.composer .bd{padding:12px}
+.composer input,.composer textarea{width:100%;background:var(--bg);border:1px solid var(--line2);padding:8px 10px;outline:none;margin-bottom:8px}
+.composer input:focus,.composer textarea:focus{border-color:var(--acc2)}
+.composer textarea{min-height:130px;resize:vertical}
+.composer .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--faint)}
+.composer code{color:var(--dim)}
+.empty{padding:20px;text-align:center;color:var(--faint);border:1px solid var(--line2);border-top:0;background:var(--panel)}
+footer{border-top:1px solid var(--line);color:var(--faint);font-size:11px;padding:16px 0 40px;margin-top:30px}
+.pager{display:flex;justify-content:space-between;margin:10px 0 0;font-size:12px}
+
+@media (max-width:640px){
+  .post{grid-template-columns:1fr}
+  .post .who{border-right:0;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:baseline;padding:8px 12px}
+  .post .who .rank{margin:0}
+  .tbl .last{display:none}
+  .tbl th.lastc{display:none}
+  .prose{font-size:17px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="logo">PROOFS // RECEPTION ARCHIVE BOARD<small id="sub">Institute of Theoretical Physics · Protocol E · Reader access</small></div>
+  <div class="tools">
+    <a class="btn" href="index.html" id="readerLink">READER</a>
+    <button class="btn" data-lang="en">EN</button><button class="btn" data-lang="zh">中文</button>
+    <button class="btn" id="themeBtn">AMBER</button>
+    <button class="btn" id="whoBtn">SIGN IN</button>
+  </div>
+</div></header>
+<div class="statusbar"><div class="wrap"><span id="statusL"></span><span id="statusR"></span></div></div>
+<main class="wrap" id="app"></main>
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script src="chapters.js"></script>
+<script>
+/* =========================================================================
+   CONFIG: edit announcements here. Board posts by you live in this file;
+   reader posts go through the storage adapter below.
+   ========================================================================= */
+const FORUM = {
+  admin: 'R. Frenneaux',
+  announcements: [
+    { id:'welcome', pinned:true, date:'2026-10-30T20:00:00+08:00',
+      title:{en:'Read me first: how this board works', zh:'请先阅读：本论坛使用说明'},
+      body:{en:'Welcome to the Reception Archive Board.\n\nA new chapter of *Proofs* is released every Friday at 20:00 Beijing time, with audio. Each chapter gets its own thread in the Chapter Archive; the recording is in Audio Logs.\n\nSpoilers: wrap anything beyond the latest chapter in [redact]like this[/redact]. Readers click to reveal it.\n\nBe kind to each other. Disagree about identity as much as you like.',
+            zh:'欢迎来到接收档案论坛。\n\n《复本》每周五北京时间20:00更新一章，附有声朗读。每一章在“章节档案”里都有自己的讨论帖；录音在“音频日志”。\n\n剧透：超出最新章节的内容，请用 [redact]这样[/redact] 包起来，读者点击才会显示。\n\n彼此友善。关于“我是谁”，尽管争论。'} },
+    { id:'schedule', pinned:false, date:'2026-10-30T20:00:00+08:00',
+      title:{en:'Release schedule: 30 Oct 2026 to 25 Jun 2027', zh:'更新时间表：2026年10月30日至2027年6月25日'},
+      body:{en:'Prologue: Friday 30 October.\nChapter One: Friday 6 November.\nThen one chapter every Friday at 20:00 Beijing time.\nChapter Thirty-Four and the complete audiobook: 25 June 2027.',
+            zh:'序章：10月30日（周五）。\n第一章：11月6日（周五）。\n之后每周五北京时间20:00更新一章。\n第三十四章与完整有声书：2027年6月25日。'} }
+  ]
+};
+
+/* =========================================================================
+   STORAGE ADAPTER
+   LocalAdapter keeps posts in this browser only (for building and testing).
+   For a live forum, swap in a backend adapter with the same four methods.
+   ========================================================================= */
+const LocalAdapter = (() => {
+  const KEY='proofs.forum.v1'; let mem=null;
+  const load=()=>{ if(mem) return mem; try{ mem=JSON.parse(localStorage.getItem(KEY))||{threads:[],posts:{}}; }catch(e){ mem={threads:[],posts:{}}; } return mem; };
+  const save=()=>{ try{ localStorage.setItem(KEY, JSON.stringify(mem)); }catch(e){} };
+  const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  return {
+    name:'LOCAL',
+    async listThreads(board){ return load().threads.filter(t=>t.board===board).sort((a,b)=>b.updated.localeCompare(a.updated)); },
+    async createThread(board,title,body,user){ const d=load(); const id=board+'-'+uid(); const now=new Date().toISOString();
+      d.threads.push({id,board,title,author:user,created:now,updated:now}); d.posts[id]=[{id:uid(),author:user,body,date:now}]; save(); return id; },
+    async listPosts(threadId){ return (load().posts[threadId]||[]).slice(); },
+    async addPost(threadId,body,user){ const d=load(); const now=new Date().toISOString();
+      (d.posts[threadId]=d.posts[threadId]||[]).push({id:uid(),author:user,body,date:now});
+      const t=d.threads.find(x=>x.id===threadId); if(t) t.updated=now; save(); },
+    async getThread(id){ return load().threads.find(t=>t.id===id)||null; },
+    async counts(){ const d=load(), m={}; for(const k in d.posts) m[k]=d.posts[k].length; return m; }
+  };
+})();
+
+/* -------------------------------------------------------------------------
+   SupabaseAdapter: shared posts for everyone. Fill in SUPABASE below
+   (Project Settings > API in Supabase). Leave blank to stay in test mode.
+   The anon key is meant to be public; the database rules in
+   supabase_setup.sql decide what visitors may do.
+   ------------------------------------------------------------------------- */
+const SUPABASE = { url:'https://cmpfgetddlunkegujotj.supabase.co', anonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtcGZnZXRkZGx1bmtlZ3Vqb3RqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNjI2MTYsImV4cCI6MjEwODkzODYxNn0.u1tvnFIB8HLpavg4ASd-xu8YJOHNt7_i61iSAkQC0gw' };
+
+const SupabaseAdapter = (() => {
+  const H=()=>({ apikey:SUPABASE.anonKey, Authorization:'Bearer '+SUPABASE.anonKey, 'Content-Type':'application/json' });
+  const api=async(path,opt={})=>{
+    const r=await fetch(SUPABASE.url.replace(/\/$/,'')+'/rest/v1/'+path,{...opt,headers:{...H(),...(opt.headers||{})}});
+    if(!r.ok) throw new Error('store '+r.status+': '+(await r.text()).slice(0,200));
+    const txt=await r.text(); return txt?JSON.parse(txt):null;
+  };
+  const enc=encodeURIComponent;
+  const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  const mapPost=p=>({id:p.id,author:p.author,body:p.body,date:p.created});
+  let countCache=null;
+  return {
+    name:'ONLINE',
+    async listThreads(board){ return api('threads?select=*&board=eq.'+enc(board)+'&order=updated.desc'); },
+    async createThread(board,title,body,user){
+      const id=board+'-'+uid();
+      await api('threads',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({id,board,title,author:user})});
+      await api('posts',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({thread_id:id,author:user,body})});
+      countCache=null; return id;
+    },
+    async listPosts(threadId){ return (await api('posts?select=id,author,body,created&thread_id=eq.'+enc(threadId)+'&order=id.asc')).map(mapPost); },
+    async addPost(threadId,body,user){ await api('posts',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({thread_id:threadId,author:user,body})}); countCache=null; },
+    async getThread(id){ const r=await api('threads?select=*&id=eq.'+enc(id)); return r[0]||null; },
+    async counts(){ if(countCache) return countCache; const r=await api('post_counts?select=thread_id,n'); const m={}; r.forEach(x=>m[x.thread_id]=x.n); return countCache=m; }
+  };
+})();
+const STORE = (SUPABASE.url && SUPABASE.anonKey) ? SupabaseAdapter : LocalAdapter;
+
+/* ========================================================================= */
+const P=new URLSearchParams(location.search), PREVIEW=P.has('preview');
+const BOOK=window.BOOK, CH=BOOK?BOOK.chapters:[];
+let lang='en', user=null, timer=null;
+try{ lang=localStorage.getItem('proofs.lang')||((navigator.language||'').toLowerCase().startsWith('zh')?'zh':'en'); user=localStorage.getItem('proofs.handle'); }catch(e){}
+if(P.get('lang')) lang=P.get('lang')==='zh'?'zh':'en';
+let theme='green'; try{ theme=localStorage.getItem('proofs.theme')||'green'; }catch(e){}
+
+const L={
+ en:{boards:'Boards',board:'Board',threads:'Threads',posts:'Posts',last:'Last activity',index:'Index',newT:'New thread',reply:'Post reply',
+   title:'Subject',body:'Message',submit:'Transmit',signin:'SIGN IN',handle:'Choose a handle (shown on your posts):',
+   locked:'CLASSIFIED',releases:'Release in',open:'OPEN FULL FILE',close:'COLLAPSE FILE',listen:'AUDIO LOG',dl:'download mp3',
+   noaudio:'No recording on file yet.',empty:'No transmissions yet. Be the first.',quote:'quote',reveal:'click to reveal',
+   help:'Formatting: blank line = new paragraph · > quote · *italic* · [redact]spoiler[/redact]',
+   reader:'READER',chapterThread:'Discussion of',by:'by',admin:'ARCHIVIST',readerRank:'READER',
+   localNote:'<b>Test mode.</b> Posts are saved in this browser only and nobody else can see them. Connect a backend before going live.',
+   B:{announcements:['Announcements','Release notes and notices from the archivist.'],
+      archive:['Chapter Archive','One file per chapter. Read it here, then argue about it.'],
+      theories:['Theories','Open threads on recurrence, identity, the Plate, the editions.'],
+      audio:['Audio Logs','The narrated chapters, one recording per log.']},
+   d:'d',h:'h',m:'m',s:'s', online:'Session',clock:'Archive time'},
+ zh:{boards:'版块',board:'版块',threads:'主题',posts:'帖子',last:'最后活动',index:'首页',newT:'发新帖',reply:'回复',
+   title:'标题',body:'内容',submit:'发送',signin:'登录',handle:'请选择一个昵称（显示在你的帖子上）：',
+   locked:'机密',releases:'距离解密',open:'展开全文',close:'收起',listen:'音频日志',dl:'下载 mp3',
+   noaudio:'暂无录音。',empty:'还没有人发言。来做第一个。',quote:'引用',reveal:'点击显示',
+   help:'格式：空行分段 · > 引用 · *斜体* · [redact]剧透[/redact]',
+   reader:'阅读',chapterThread:'讨论：',by:'作者',admin:'档案员',readerRank:'读者',
+   localNote:'<b>测试模式。</b>帖子只保存在本浏览器中，其他人看不到。正式上线前需要接入后端。',
+   B:{announcements:['公告','档案员发布的更新说明与通知。'],
+      archive:['章节档案','每章一份档案。在这里阅读，然后展开讨论。'],
+      theories:['理论','关于复现、身份、底版与版本的开放讨论。'],
+      audio:['音频日志','逐章朗读录音。']},
+   d:'天',h:'时',m:'分',s:'秒', online:'会话',clock:'档案时间'}
+};
+const t=k=>L[lang][k];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const released=c=>PREVIEW||new Date(c.releaseDate).getTime()<=Date.now();
+const rel=CH.filter(released);
+const fmt=iso=>{ const d=new Date(iso); const p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes()); };
+const code=(b,n)=>({announcements:'ANN',archive:'ARC',theories:'THY',audio:'AUD'}[b])+'-'+String(n).padStart(3,'0');
+function fmtBody(s){
+  let h=esc(s);
+  h=h.replace(/\[redact\]([\s\S]*?)\[\/redact\]/g,'<span class="redact" title="'+t('reveal')+'">$1</span>');
+  h=h.replace(/\*([^*\n]+)\*/g,'<i>$1</i>');
+  return h.split(/\n{2,}/).map(par=>{
+    if(/^&gt; ?/.test(par)) return '<blockquote>'+par.replace(/^&gt; ?/gm,'').replace(/\n/g,'<br>')+'</blockquote>';
+    return '<p>'+par.replace(/\n/g,'<br>')+'</p>';
+  }).join('');
+}
+function countdown(iso){ return '<div class="cd" data-until="'+iso+'"></div>'; }
+function tick(){
+  document.querySelectorAll('[data-until]').forEach(el=>{
+    let ms=new Date(el.dataset.until)-Date.now(); if(ms<=0){ location.reload(); return; }
+    const d=Math.floor(ms/864e5); ms%=864e5; const h=Math.floor(ms/36e5); ms%=36e5; const m=Math.floor(ms/6e4); const s=Math.floor(ms%6e4/1e3);
+    const p=n=>String(n).padStart(2,'0'); el.textContent=t('releases')+' '+d+t('d')+' '+p(h)+t('h')+' '+p(m)+t('m')+' '+p(s)+t('s');
+  });
+  $('#statusR').textContent=t('clock')+' '+fmt(new Date().toISOString());
+}
+
+/* chapter threads are generated from the book itself */
+const chThread=c=>({id:'arc-'+c.id, board:'archive', ch:c, title:c[lang].title});
+const auThread=c=>({id:'aud-'+c.id, board:'audio', ch:c, title:c[lang].title});
+
+async function boardStats(b){
+  if(b==='announcements') return {threads:FORUM.announcements.length, posts:FORUM.announcements.length, last:FORUM.announcements[0]};
+  if(b==='archive'||b==='audio'){
+    const C=await STORE.counts(); let posts=0; for(const c of rel) posts+=(C[(b==='archive'?'arc-':'aud-')+c.id]||0);
+    const lc=rel[rel.length-1]; return {threads:rel.length, posts, lastCh:lc};
+  }
+  const th=await STORE.listThreads(b); const C=await STORE.counts(); let posts=0; for(const x of th) posts+=(C[x.id]||0);
+  return {threads:th.length, posts, lastT:th[0]};
+}
+
+async function viewIndex(){
+  crumbs([]);
+  let h=STORE.name==='LOCAL'?'<div class="notice">'+t('localNote')+'</div>':'';
+  h+='<table class="tbl"><caption>'+t('boards')+'</caption><tr><th>'+t('board')+'</th><th class="num">'+t('threads')+'</th><th class="num">'+t('posts')+'</th><th class="lastc">'+t('last')+'</th></tr>';
+  for(const b of ['announcements','archive','theories','audio']){
+    const s=await boardStats(b); const B=t('B')[b];
+    let last='—';
+    if(s.lastCh) last='<a href="#/t/'+(b==='archive'?'arc-':'aud-')+s.lastCh.id+'">'+esc(s.lastCh[lang].title)+'</a><br>'+fmt(s.lastCh.releaseDate);
+    else if(s.lastT) last='<a href="#/t/'+s.lastT.id+'">'+esc(s.lastT.title)+'</a><br>'+fmt(s.lastT.updated);
+    else if(s.last) last='<a href="#/t/ann-'+s.last.id+'">'+esc(s.last.title[lang])+'</a>';
+    h+='<tr><td><a class="bname" href="#/b/'+b+'">'+B[0]+'</a><div class="bdesc">'+B[1]+'</div></td><td class="num">'+s.threads+'</td><td class="num">'+s.posts+'</td><td class="last">'+last+'</td></tr>';
+  }
+  h+='</table>';
+  const nxt=CH.find(c=>!released(c));
+  if(nxt) h+='<table class="tbl"><caption>'+t('locked')+'</caption><tr><td><span class="tag lock">'+t('locked')+'</span> '+esc(nxt[lang].title)+'<div class="bdesc">'+countdown(nxt.releaseDate).replace('class="cd"','class="count"')+'</div></td></tr></table>';
+  $('#app').innerHTML=h;
+}
+
+async function viewBoard(b){
+  const B=t('B')[b]; crumbs([[B[0]]]);
+  let h='<table class="tbl"><caption>'+B[0]+'</caption><tr><th>'+t('title')+'</th><th class="num">'+t('posts')+'</th><th class="lastc">'+t('last')+'</th></tr>';
+  if(b==='announcements'){
+    FORUM.announcements.forEach((a,i)=>{ h+='<tr><td><span class="code">'+code(b,i+1)+'</span><a href="#/t/ann-'+a.id+'">'+esc(a.title[lang])+'</a>'+(a.pinned?'<span class="tag pin">pinned</span>':'')+'<div class="bdesc">'+t('by')+' '+FORUM.admin+'</div></td><td class="num">1</td><td class="last">'+fmt(a.date)+'</td></tr>'; });
+  } else if(b==='archive'||b==='audio'){
+    const latest=rel[rel.length-1];
+    for(const c of CH){
+      const id=(b==='archive'?'arc-':'aud-')+c.id;
+      if(released(c)){
+        const n=(await STORE.counts())[id]||0;
+        h+='<tr><td><span class="code">'+code(b,c.id)+'</span><a href="#/t/'+id+'">'+esc(c[lang].title)+'</a>'+(c===latest&&!PREVIEW?'<span class="tag new">new</span>':'')+'<div class="bdesc">'+(c[lang].part?esc((lang==='en'?'Part ':'')+c[lang].part.num+' · '+c[lang].part.title):'')+'</div></td><td class="num">'+n+'</td><td class="last">'+fmt(c.releaseDate)+'</td></tr>';
+      } else {
+        h+='<tr class="locked"><td><span class="code">'+code(b,c.id)+'</span>'+esc(c[lang].title)+'<span class="tag lock">'+t('locked')+'</span></td><td class="num">—</td><td class="last">'+fmt(c.releaseDate)+'</td></tr>';
+      }
+    }
+  } else {
+    const th=await STORE.listThreads(b);
+    if(!th.length) h+='<tr><td colspan="3" style="color:var(--faint);text-align:center;padding:18px">'+t('empty')+'</td></tr>';
+    const C=await STORE.counts();
+    for(const [i,x] of th.entries()){ const n=C[x.id]||0;
+      h+='<tr><td><span class="code">'+code(b,th.length-i)+'</span><a href="#/t/'+x.id+'">'+esc(x.title)+'</a><div class="bdesc">'+t('by')+' '+esc(x.author)+'</div></td><td class="num">'+n+'</td><td class="last">'+fmt(x.updated)+'</td></tr>'; }
+  }
+  h+='</table>';
+  if(b==='theories') h+=composer(true);
+  $('#app').innerHTML=h; wireComposer(async(title,body)=>{ const id=await STORE.createThread('theories',title,body,user); location.hash='#/t/'+id; });
+}
+
+function reader(c){
+  const Lc=c[lang];
+  let h='<div class="dossier"><div class="bar"><span><b>'+t('listen')+'</b> · '+esc(Lc.title)+'</span><a href="'+c.audioUrl+'" download>'+t('dl')+' ↓</a></div>'+
+        '<div style="padding:8px 12px" id="aud"><audio controls preload="metadata" src="'+c.audioUrl+'"></audio><div class="bdesc" id="noaud" style="display:none">'+t('noaudio')+'</div></div></div>';
+  return h;
+}
+function page(c,clip){
+  const Lc=c[lang]; let h='<div class="dossier"><div class="page'+(clip?' clipped':'')+'" id="page"><div class="prose">';
+  if(Lc.part) h+='<div class="partcard">'+esc((lang==='en'?'Part ':'')+Lc.part.num)+'<b>'+esc(Lc.part.title)+'</b>'+(Lc.part.dateline?esc(Lc.part.dateline):'')+'</div>'+Lc.part.epi.replace('<blockquote class="epi">','<div class="epi">').replace('</blockquote>','</div>');
+  h+='<h2>'+esc(Lc.title)+'</h2>'+(Lc.dateline?'<div class="epi"><i>'+esc(Lc.dateline)+'</i></div>':'')+Lc.html.replace(/<blockquote class="epi">/g,'<div class="epi">').replace(/<\/blockquote>/g,'</div>');
+  h+='</div></div><button class="expand" id="exp">'+(clip?t('open'):t('close'))+'</button></div>';
+  return h;
+}
+
+async function viewThread(id){
+  let board, title, head='', pre='', posts=[], locked=false, ch=null;
+  if(id.startsWith('ann-')){
+    const a=FORUM.announcements.find(x=>'ann-'+x.id===id); if(!a) return viewIndex();
+    board='announcements'; title=a.title[lang];
+    posts=[{author:FORUM.admin,admin:true,date:a.date,body:a.body[lang],id:'op'}];
+  } else if(id.startsWith('arc-')||id.startsWith('aud-')){
+    ch=CH[+id.slice(4)]; if(!ch) return viewIndex();
+    board=id.startsWith('arc-')?'archive':'audio'; title=ch[lang].title; locked=!released(ch);
+    if(!locked){ pre = board==='audio' ? reader(ch) : reader(ch)+page(ch,true); posts=await STORE.listPosts(id); }
+  } else {
+    const th=await STORE.getThread(id); if(!th) return viewIndex();
+    board=th.board; title=th.title; posts=await STORE.listPosts(id);
+  }
+  const B=t('B')[board]; crumbs([[B[0],'#/b/'+board],[title]]);
+  let h='<div class="thead"><h1>'+esc((board==='archive'?t('chapterThread')+' ':'')+title)+'</h1><div class="meta">'+B[0]+(ch?' · '+fmt(ch.releaseDate):'')+'</div></div>';
+  if(locked){
+    h+='<div class="classified"><div class="stamp">'+t('locked')+'</div>'+countdown(ch.releaseDate)+'</div>';
+    $('#app').innerHTML=h; return;
+  }
+  h+=pre;
+  if(!posts.length && board!=='announcements') h+='<div class="empty">'+t('empty')+'</div>';
+  posts.forEach((p,i)=>{
+    h+='<div class="post'+(p.admin?' admin':'')+'" id="p'+(i+1)+'"><div class="who"><div class="h">'+esc(p.author)+'</div><div class="rank">'+(p.admin?t('admin'):t('readerRank'))+'</div></div>'+
+       '<div class="body"><div class="phead"><span>'+fmt(p.date)+'</span><a href="#/t/'+id+'">#'+String(i+1).padStart(4,'0')+'</a></div><div class="txt">'+fmtBody(p.body)+'</div>'+
+       (board!=='announcements'?'<div class="actions"><button data-q="'+i+'">'+t('quote')+'</button></div>':'')+'</div></div>';
+  });
+  if(board!=='announcements') h+=composer(false);
+  $('#app').innerHTML=h;
+  const exp=$('#exp'); if(exp) exp.onclick=()=>{ const pg=$('#page'); const c=pg.classList.toggle('clipped'); exp.textContent=c?t('open'):t('close'); if(c) pg.scrollIntoView({block:'start'}); };
+  const au=document.querySelector('#aud audio'); if(au){ au.addEventListener('error',()=>{ au.style.display='none'; $('#noaud').style.display='block'; }); }
+  document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{ const p=posts[+b.dataset.q]; const ta=$('#cbody'); ta.value+=(ta.value?'\n\n':'')+'> '+p.author+':\n> '+p.body.split('\n').join('\n> ')+'\n\n'; ta.focus(); });
+  wireComposer(async(_,body)=>{ await STORE.addPost(id,body,user); route(); setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),50); });
+}
+
+function composer(withTitle){
+  return '<div class="composer"><div class="hd">'+(withTitle?t('newT'):t('reply'))+'</div><div class="bd">'+
+    (withTitle?'<input id="ctitle" maxlength="120" placeholder="'+t('title')+'">':'')+
+    '<textarea id="cbody" maxlength="8000" placeholder="'+t('body')+'"></textarea>'+
+    '<div class="row"><span>'+t('help')+'</span><button class="btn primary" id="csend">'+t('submit')+' ▸</button></div></div></div>';
+}
+function wireComposer(fn){
+  const b=$('#csend'); if(!b) return;
+  b.onclick=async()=>{
+    if(!user && !signIn()) return;
+    const title=$('#ctitle')?$('#ctitle').value.trim():''; const body=$('#cbody').value.trim();
+    if(!body || ($('#ctitle')&&!title)) return;
+    b.disabled=true;
+    try{ await fn(title,body); }catch(e){ b.disabled=false; alert('Could not post: '+e.message); }
+  };
+}
+function signIn(){
+  const h=prompt(t('handle'), user||''); if(!h||!h.trim()) return false;
+  user=h.trim().slice(0,32); try{ localStorage.setItem('proofs.handle',user); }catch(e){} chrome(); return true;
+}
+function crumbs(items){
+  let h='<div class="crumbs"><a href="#/">'+t('index')+'</a>';
+  items.forEach(([n,href])=>{ h+='<span>›</span>'+(href?'<a href="'+href+'">'+esc(n)+'</a>':esc(n)); });
+  window.__crumbs=h+'</div>';
+}
+function chrome(){
+  document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+  document.documentElement.dataset.theme=theme;
+  document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  $('#themeBtn').textContent=theme==='green'?'AMBER':'GREEN';
+  $('#whoBtn').textContent=user?('◉ '+user):t('signin');
+  $('#readerLink').textContent=t('reader');
+  $('#statusL').innerHTML=t('online')+': <b>'+(user?esc(user):'guest')+'</b> · store: <b>'+STORE.name+'</b>'+(PREVIEW?' · <b style="color:var(--warn)">PREVIEW</b>':'')+'<span class="blink"> _</span>';
+  $('#foot').innerHTML='PROOFS © 2026 R. Frenneaux · '+(lang==='zh'?'复本':'Proofs')+' · <a href="index.html">'+t('reader')+'</a>';
+}
+async function route(){
+  chrome();
+  const hsh=location.hash.replace(/^#\/?/,'');
+  const [kind,arg]=hsh.split('/');
+  try{
+    if(kind==='b' && L.en.B[arg]) await viewBoard(arg);
+    else if(kind==='t' && arg) await viewThread(arg);
+    else await viewIndex();
+  }catch(e){ window.__crumbs=''; $('#app').innerHTML='<div class="notice"><b>ARCHIVE OFFLINE.</b> '+esc(e.message)+'</div>'; }
+  $('#app').insertAdjacentHTML('afterbegin',window.__crumbs||'');
+  document.querySelectorAll('.redact').forEach(r=>r.onclick=()=>r.classList.toggle('open'));
+  clearInterval(timer); tick(); timer=setInterval(tick,1000);
+  if(!kind) window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; try{localStorage.setItem('proofs.lang',lang);}catch(e){} route(); });
+$('#themeBtn').onclick=()=>{ theme=theme==='green'?'amber':'green'; try{localStorage.setItem('proofs.theme',theme);}catch(e){} chrome(); };
+$('#whoBtn').onclick=()=>signIn();
+window.addEventListener('hashchange',()=>{ route(); window.scrollTo(0,0); });
+if(!BOOK) document.getElementById('app').innerHTML='<p>chapters.js not found.</p>'; else route();
+</script>
+</body>
+</html>

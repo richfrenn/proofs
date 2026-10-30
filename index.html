@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proofs · R. Frenneaux</title>
+<meta name="description" content="Proofs, a novel by R. Frenneaux. One chapter a week, with audio.">
+<link rel="icon" href="assets/img/cover_en.jpg">
+<style>
+:root{
+  --bg:#141619; --bg2:#1b1e22; --ink:#e9e3d6; --dim:#9c9486; --faint:#5f5a52; --line:#2c3036; --accent:#c9b48a;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman","Noto Serif SC","Songti SC","STSong",serif;
+  --sans:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;
+  background:radial-gradient(circle at 20% 10%,#fff 0,transparent 40%),radial-gradient(circle at 80% 90%,#c9b48a 0,transparent 35%);
+  animation:drift 30s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(-3%,2%) scale(1.05)}}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 16px;background:rgba(20,22,25,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);font-family:var(--sans);font-size:13px;letter-spacing:.08em}
+.bar .brand{letter-spacing:.35em;text-transform:uppercase;font-family:var(--serif);font-size:14px;text-decoration:none}
+.bar .right{display:flex;gap:6px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--dim)}
+.pill:hover,.pill.on{color:var(--ink);border-color:var(--dim)}
+
+/* home */
+.hero{max-width:1040px;margin:0 auto;padding:48px 16px 24px;display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:48px;align-items:center}
+.hero img{width:100%;display:block;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.hero h1{font-weight:normal;font-size:clamp(40px,7vw,72px);letter-spacing:.3em;margin:0 0 6px}
+.hero .by{color:var(--dim);letter-spacing:.25em;font-size:14px;text-transform:uppercase;margin:0 0 28px}
+.hero .blurb{font-size:19px;line-height:1.65;color:#d7d0c2;margin:0 0 28px;max-width:34em}
+.next{border:1px solid var(--line);background:var(--bg2);padding:18px 20px;max-width:30em}
+.next .k{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.next .t{font-size:20px;margin-bottom:6px}
+.count{font-family:var(--sans);font-variant-numeric:tabular-nums;font-size:24px;letter-spacing:.06em;color:var(--accent)}
+.count span{font-size:11px;letter-spacing:.15em;color:var(--dim);margin:0 10px 0 3px;text-transform:uppercase}
+.cta{display:inline-block;margin-top:22px;border:1px solid var(--accent);color:var(--accent);padding:11px 22px;text-decoration:none;letter-spacing:.15em;font-family:var(--sans);font-size:13px;text-transform:uppercase}
+.cta:hover{background:var(--accent);color:var(--bg)}
+.toc{max-width:1040px;margin:24px auto 80px;padding:0 16px}
+.toc h2,.sec h2{font-weight:normal;font-family:var(--sans);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:10px}
+.plabel{margin:28px 0 8px;font-size:13px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);font-family:var(--sans)}
+.row{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid #1f2226;text-decoration:none}
+.row:hover .nm{color:#fff}
+.row .nm{font-size:18px}
+.row .dt{font-family:var(--sans);font-size:12px;color:var(--dim);white-space:nowrap;align-self:center}
+.row.locked{color:var(--faint);cursor:default}
+.row.locked .dt::before{content:"◷ "}
+.row .new{font-family:var(--sans);font-size:10px;letter-spacing:.15em;color:var(--bg);background:var(--accent);padding:2px 6px;margin-left:8px;vertical-align:middle}
+.final{max-width:1040px;margin:0 auto 40px;padding:0 16px}
+.finalbox{border:1px solid var(--accent);padding:24px;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:linear-gradient(90deg,rgba(201,180,138,.08),transparent)}
+.finalbox .t{font-size:22px}
+.finalbox .s{color:var(--dim);font-size:15px;margin-top:4px}
+
+/* reader */
+.reader{max-width:680px;margin:0 auto;padding:40px 20px 120px}
+.parthead{text-align:center;padding:60px 0 50px;border-bottom:1px solid var(--line);margin-bottom:56px}
+.parthead .n{font-family:var(--sans);letter-spacing:.4em;font-size:12px;color:var(--dim);text-transform:uppercase}
+.parthead h2{font-weight:normal;font-size:40px;letter-spacing:.15em;margin:14px 0 10px}
+.parthead img{width:100%;margin:28px 0 8px;opacity:.9}
+.dateline{text-align:center;font-style:italic;color:var(--dim);margin:6px 0 26px}
+.chtitle{text-align:center;font-weight:normal;font-size:16px;letter-spacing:.35em;text-transform:uppercase;margin:20px 0 34px;color:var(--ink)}
+.epi{margin:0 auto 36px;max-width:30em;text-align:center;color:var(--dim);font-size:15px;line-height:1.6}
+.epi p{margin:0 0 6px}.epi .fr{color:#c8bfae}
+.audio{border:1px solid var(--line);background:var(--bg2);padding:14px 16px;margin:0 0 40px;display:none}
+.audio.show{display:block}
+.audio .k{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:flex;justify-content:space-between;margin-bottom:10px}
+.audio audio{width:100%;height:36px;filter:invert(.88) sepia(.15)}
+.audio a{text-decoration:none;color:var(--accent)}
+.text{font-size:19px;line-height:1.75;color:#e4ddcf}
+.text p{margin:0;text-indent:1.4em}
+.text > p:first-child,.text .brk + p,.text .doc + p:not(.doc),.text .set + p,.text .epi + p{text-indent:0}
+.text .doc{text-indent:0;margin:.5em 1.4em;color:#d3cab9}
+.text .set{text-indent:0;text-align:center;margin:1em 0}
+.text .brk{text-indent:0;text-align:center;margin:1.4em 0;color:var(--dim)}
+html[lang="zh-CN"] .text{font-size:18px;line-height:1.95;text-align:justify}
+html[lang="zh-CN"] .text p{text-indent:2em}
+html[lang="zh-CN"] .text .kai{font-family:"Kaiti SC","STKaiti","KaiTi",var(--serif)}
+html[lang="zh-CN"] .chtitle{letter-spacing:.5em;font-size:20px}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:70px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--sans);font-size:13px;letter-spacing:.1em}
+.nav a,.nav span{text-decoration:none;color:var(--dim)}
+.nav a:hover{color:var(--ink)}
+.lockcard{text-align:center;padding:80px 0}
+.lockcard .t{font-size:26px;margin:14px 0 22px}
+
+/* drawer */
+.drawer{position:fixed;inset:0 auto 0 0;width:min(360px,88vw);background:#111316;border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .3s ease;z-index:40;overflow:auto;padding:20px 20px 60px}
+.drawer.open{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s;z-index:30}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer .row .nm{font-size:16px}
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:50;width:0}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;gap:28px;padding-top:28px}
+  .hero img{max-width:260px;margin:0 auto}
+  .hero h1{font-size:44px}
+  .text{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="bar">
+  <div style="display:flex;gap:10px;align-items:center">
+    <button class="pill" id="menuBtn" aria-label="Contents">☰</button>
+    <a class="brand" href="#" id="brand">Proofs</a>
+  </div>
+  <div class="right">
+    <button class="pill" data-lang="en">EN</button>
+    <button class="pill" data-lang="zh">中文</button>
+  </div>
+</header>
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer"></nav>
+<main id="app"></main>
+
+<script src="chapters.js"></script>
+<script>
+(function(){
+const PARAMS = new URLSearchParams(location.search);
+const PREVIEW = PARAMS.has('preview');            // ?preview unlocks everything (author checks)
+const IMG = {One:'assets/img/img_mug.jpg', Two:'assets/img/img_chairs.jpg', Three:'assets/img/img_ceto.jpg'};
+const T = {
+  en:{contents:'Contents', start:'Start reading', cont:'Continue reading', next:'Next chapter', drops:'drops in',
+      d:'days',h:'hrs',m:'min',s:'sec', locked:'Not yet released', listen:'Listen', download:'Download MP3',
+      prev:'Previous', home:'Contents', full:'The complete audiobook', fullsub:'All 34 chapters and the prologue, in one file.',
+      fulldl:'Download the audiobook', avail:'Available', newb:'NEW', partPre:'Part',
+      blurb:'In 2044 a physicist wakes barefoot on the step of her own building, holding a cup of tea. The registry says she died two years ago. <em>Proofs</em> is a novel about copies, memory, and whether anyone who comes back is still the person who left.',
+      sched:'A new chapter every Friday, with audio.', all:'Every chapter is out.'},
+  zh:{contents:'目录', start:'开始阅读', cont:'继续阅读', next:'下一章', drops:'距离发布还有',
+      d:'天',h:'时',m:'分',s:'秒', locked:'尚未发布', listen:'收听', download:'下载 MP3',
+      prev:'上一章', home:'目录', full:'完整有声书', fullsub:'序章与全部三十四章，一个文件。',
+      fulldl:'下载有声书', avail:'发布于', newb:'新', partPre:'',
+      blurb:'2044年，一位物理学家光着脚，在自家楼前的台阶上醒来，手里端着一杯茶。登记处说，她两年前就死了。《复本》是一部关于复制、记忆，以及回来的人是否还是离开的那个人的小说。',
+      sched:'每周五更新一章，附有声朗读。', all:'全部章节已发布。'}
+};
+let BOOK=null, lang='en', timer=null;
+try{ lang = localStorage.getItem('proofs.lang') || (navigator.language||'').toLowerCase().startsWith('zh') && 'zh' || 'en'; }catch(e){}
+if(PARAMS.get('lang')==='zh'||PARAMS.get('lang')==='en') lang=PARAMS.get('lang');
+
+const $ = s=>document.querySelector(s);
+const now = ()=>Date.now();
+const released = c => PREVIEW || new Date(c.releaseDate).getTime() <= now();
+const label = c => c[lang].title;
+const t = k => T[lang][k];
+function fmtDate(iso){
+  const d=new Date(iso);
+  return lang==='zh' ? (d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日')
+                     : d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+function partTitle(c){ const p=c[lang].part; if(!p) return ''; return lang==='zh' ? p.num+'　'+p.title : 'Part '+p.num+': '+p.title; }
+function nextLocked(){ return BOOK.chapters.find(c=>!released(c)); }
+function lastReleased(){ const r=BOOK.chapters.filter(released); return r[r.length-1]; }
+function countdownHTML(c){ return '<div class="count" data-until="'+c.releaseDate+'"></div>'; }
+function tick(){
+  document.querySelectorAll('[data-until]').forEach(el=>{
+    let ms=new Date(el.dataset.until).getTime()-now();
+    if(ms<=0){ clearInterval(timer); render(); return; }
+    const d=Math.floor(ms/864e5); ms-=d*864e5; const h=Math.floor(ms/36e5); ms-=h*36e5;
+    const m=Math.floor(ms/6e4); const s=Math.floor((ms-m*6e4)/1e3);
+    const p=n=>String(n).padStart(2,'0');
+    el.innerHTML=d+'<span>'+t('d')+'</span>'+p(h)+'<span>'+t('h')+'</span>'+p(m)+'<span>'+t('m')+'</span>'+p(s)+'<span>'+t('s')+'</span>';
+  });
+}
+function rowsHTML(withDates){
+  let h='', lastPart=null; const nl=nextLocked(); const lr=lastReleased();
+  BOOK.chapters.forEach(c=>{
+    if(c.part!==lastPart && c[lang].part){ h+='<div class="plabel">'+partTitle(c)+'</div>'; lastPart=c.part; }
+    if(released(c)){
+      h+='<a class="row" href="#ch-'+c.id+'"><span class="nm">'+label(c)+(c===lr&&!PREVIEW?'<span class="new">'+t('newb')+'</span>':'')+'</span>'+(withDates?'<span class="dt">'+fmtDate(c.releaseDate)+'</span>':'')+'</a>';
+    } else {
+      h+='<div class="row locked"><span class="nm">'+label(c)+'</span><span class="dt">'+fmtDate(c.releaseDate)+'</span></div>';
+    }
+  });
+  return h;
+}
+function finalHTML(){
+  const f=BOOK.chapters.find(c=>c.isFinal);
+  if(!f || !released(f)) return '';
+  return '<section class="final"><div class="finalbox"><div><div class="t">'+t('full')+'</div><div class="s">'+t('fullsub')+'</div></div>'+
+         '<a class="cta" href="'+BOOK.fullAudiobook+'" download>'+t('fulldl')+'</a></div></section>';
+}
+function home(){
+  const nl=nextLocked(); let saved=null;
+  try{ saved=localStorage.getItem('proofs.last'); }catch(e){}
+  const startId = saved && BOOK.chapters[+saved] && released(BOOK.chapters[+saved]) ? +saved : 0;
+  let next = nl ? '<div class="next"><div class="k">'+t('next')+' · '+fmtDate(nl.releaseDate)+'</div><div class="t">'+label(nl)+'</div><div class="k" style="margin:10px 0 6px">'+t('drops')+'</div>'+countdownHTML(nl)+'</div>'
+               : '<div class="next"><div class="t">'+t('all')+'</div></div>';
+  $('#app').innerHTML =
+    '<section class="hero"><img src="assets/img/cover_'+(lang==='zh'?'zh':'en')+'.jpg" alt="'+BOOK.title[lang]+'">'+
+    '<div><h1>'+(lang==='zh'?BOOK.title.zh:BOOK.title.en.toUpperCase())+'</h1><p class="by">'+BOOK.author+'</p>'+
+    '<p class="blurb">'+t('blurb')+'</p><p class="by" style="text-transform:none;letter-spacing:.05em">'+t('sched')+'</p>'+next+
+    (released(BOOK.chapters[0])?'<a class="cta" href="#ch-'+startId+'">'+(saved?t('cont'):t('start'))+'</a>':'')+'</div></section>'+
+    finalHTML()+
+    '<section class="toc"><h2>'+t('contents')+'</h2>'+rowsHTML(true)+'</section>';
+  window.scrollTo(0,0);
+}
+function chapter(id){
+  const c=BOOK.chapters[id]; if(!c){ location.hash=''; return; }
+  const L=c[lang];
+  if(!released(c)){
+    $('#app').innerHTML='<article class="reader"><div class="lockcard"><div class="k" style="font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase">'+t('locked')+'</div><div class="t">'+label(c)+'</div>'+countdownHTML(c)+'</div><div class="nav"><a href="#">'+t('home')+'</a><span></span></div></article>';
+    tick(); return;
+  }
+  try{ localStorage.setItem('proofs.last', String(id)); }catch(e){}
+  let h='<article class="reader">';
+  if(L.part){
+    h+='<div class="parthead"><div class="n">'+(lang==='zh'?L.part.num:'Part '+L.part.num)+'</div><h2>'+L.part.title+'</h2>'+
+       (L.part.dateline?'<div class="dateline">'+L.part.dateline+'</div>':'')+
+       (IMG[c.part]?'<img src="'+IMG[c.part]+'" alt="">':'')+'<div class="epi">'+L.part.epi.replace(/<\/?blockquote[^>]*>/g,'')+'</div></div>';
+  }
+  if(id===0) h+='<img src="assets/img/img_fort.jpg" alt="" style="width:100%;margin-bottom:30px;opacity:.9">';
+  h+='<h1 class="chtitle">'+L.title+'</h1>'+(L.dateline?'<div class="dateline">'+L.dateline+'</div>':'');
+  h+='<div class="audio" id="audio"><div class="k"><span>'+t('listen')+'</span><a href="'+c.audioUrl+'" download>'+t('download')+' ↓</a></div><audio controls preload="metadata" src="'+c.audioUrl+'"></audio></div>';
+  h+='<div class="text">'+L.html+'</div>';
+  if(c.isFinal) h+=finalHTML().replace('class="final"','class="final" style="padding:0;margin-top:60px"');
+  const prev=BOOK.chapters[id-1], nxt=BOOK.chapters[id+1];
+  h+='<div class="nav">'+(prev?'<a href="#ch-'+prev.id+'">← '+label(prev)+'</a>':'<a href="#">'+t('home')+'</a>')+
+     (nxt?(released(nxt)?'<a href="#ch-'+nxt.id+'">'+label(nxt)+' →</a>':'<span>'+label(nxt)+' · '+fmtDate(nxt.releaseDate)+'</span>'):'<a href="#">'+t('home')+'</a>')+'</div></article>';
+  $('#app').innerHTML=h;
+  window.scrollTo(0,0);
+  // show the player only if the audio file actually exists
+  const au=document.querySelector('#audio audio'); if(au) au.addEventListener('loadedmetadata',()=>$('#audio').classList.add('show'));
+}
+function drawer(){ $('#drawer').innerHTML='<div class="plabel" style="margin-top:4px">'+t('contents')+'</div>'+rowsHTML(false); }
+function render(){
+  document.documentElement.lang = lang==='zh'?'zh-CN':'en';
+  document.title = lang==='zh' ? '复本 · R. Frenneaux' : 'Proofs · R. Frenneaux';
+  $('#brand').textContent = lang==='zh'?'复本':'Proofs';
+  document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
+  $('#menuBtn').title=t('contents');
+  const m=location.hash.match(/^#ch-(\d+)/);
+  m ? chapter(+m[1]) : home();
+  drawer(); clearInterval(timer); tick(); timer=setInterval(tick,1000);
+}
+function closeDrawer(){ $('#drawer').classList.remove('open'); $('#scrim').classList.remove('open'); }
+$('#menuBtn').onclick=()=>{ $('#drawer').classList.toggle('open'); $('#scrim').classList.toggle('open'); };
+$('#scrim').onclick=closeDrawer;
+$('#drawer').addEventListener('click',e=>{ if(e.target.closest('a')) closeDrawer(); });
+document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; try{localStorage.setItem('proofs.lang',lang);}catch(e){} render(); });
+window.addEventListener('hashchange',render);
+window.addEventListener('scroll',()=>{ const h=document.documentElement; const p=h.scrollTop/((h.scrollHeight-h.clientHeight)||1); $('#progress').style.width=(location.hash.startsWith('#ch-')?p*100:0)+'%'; },{passive:true});
+if(window.BOOK){ BOOK=window.BOOK; render(); }
+else { $('#app').innerHTML='<p style="padding:40px;text-align:center">Could not load chapters.js. Keep it in the same folder as index.html.</p>'; }
+})();
+</script>
+</body>
+</html>

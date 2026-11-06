@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Idea · Proofs</title>
+<meta name="description" content="The man in the cell, his argument, and the question Proofs asks: if a perfect copy of you woke up tomorrow, would it be you?">
+<link rel="icon" href="assets/img/cover_en.jpg">
+<style>
+:root{
+  --bg:#141619; --bg2:#1b1e22; --ink:#e9e3d6; --dim:#9c9486; --faint:#5f5a52; --line:#2c3036; --accent:#c9b48a;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman","Noto Serif SC","Songti SC","STSong",serif;
+  --sans:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 16px;background:rgba(20,22,25,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);font-family:var(--sans);font-size:13px;letter-spacing:.08em}
+.bar .brand{letter-spacing:.35em;text-transform:uppercase;font-family:var(--serif);font-size:14px;text-decoration:none}
+.bar .right{display:flex;gap:6px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--dim);text-decoration:none}
+.pill:hover,.pill.on{color:var(--ink);border-color:var(--dim)}
+main{max-width:40em;margin:0 auto;padding:0 16px 90px}
+.top{width:100%;display:block;margin:0 0 34px;opacity:.9}
+.kick{font-family:var(--sans);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+h1{font-weight:normal;font-size:clamp(30px,6vw,44px);letter-spacing:.06em;line-height:1.2;margin:0 0 30px}
+h2{font-weight:normal;font-size:23px;letter-spacing:.04em;margin:52px 0 16px;color:var(--accent)}
+p{font-size:18.5px;line-height:1.75;margin:0 0 18px;color:#ddd6c8}
+.fr{font-style:italic;color:var(--accent)}
+.quote{border-left:2px solid var(--accent);padding:4px 0 4px 20px;margin:26px 0}
+.quote p{margin:0 0 6px}
+.quote .src{font-family:var(--sans);font-size:12px;letter-spacing:.06em;color:var(--dim)}
+table{width:100%;border-collapse:collapse;margin:26px 0 10px;font-family:var(--sans);font-size:14px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:normal;color:var(--dim);font-size:11px;letter-spacing:.15em;text-transform:uppercase}
+td.y{color:var(--accent)} td.n{color:var(--dim)}
+.note{font-family:var(--sans);font-size:13px;color:var(--dim);line-height:1.6}
+ul.read{padding:0;list-style:none;margin:0}
+ul.read li{font-size:16px;line-height:1.6;margin:0 0 12px;color:#cfc8ba}
+.end{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--sans);font-size:14px;display:flex;gap:18px;flex-wrap:wrap}
+.end a{color:var(--dim)} .end a:hover{color:var(--ink)}
+@media (max-width:600px){p{font-size:17.5px} th,td{padding:10px 6px;font-size:13px}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="index.html" id="brand">Proofs</a>
+  <div class="right">
+    <a class="pill" href="index.html" id="readLink">Read</a>
+    <button class="pill" data-lang="en">EN</button>
+    <button class="pill" data-lang="zh">中文</button>
+  </div>
+</header>
+<main>
+  <img class="top" src="assets/img/img_fort.jpg" alt="">
+  <article id="body"></article>
+</main>
+<script>
+(function(){
+const C = {
+en: `
+<p class="kick">The idea behind Proofs</p>
+<h1>The man in the cell</h1>
+
+<p>The Prologue's prisoner is Louis-Auguste Blanqui (1805–1881), the most stubborn revolutionary of nineteenth-century France. He spent more than thirty years of his life in prison. In March 1871 he was arrested the day before the Paris Commune broke out, the uprising he had spent his life preparing for, and was taken to the Fort du Taureau, a sea fortress in the Baie de Morlaix in Brittany.</p>
+<p>There, in the months after the Commune was crushed, he wrote a short book about the stars: <i>L’Éternité par les astres</i>, “Eternity by the Stars”, published in 1872. Every part of <i>Proofs</i> opens with a line from it.</p>
+
+<h2>His argument</h2>
+<p>Blanqui’s reasoning is simple. The universe is built from a limited number of elements. Space and time have no end. A limited set of pieces, combined over infinite space, must run out of new combinations and start repeating them. So everything that exists, this planet, this room, you, exists again elsewhere, exactly, and not once but endlessly.</p>
+<p>He called these repetitions <i>sosies</i>: doubles. Some live your life exactly. Some differ by one choice. He first thought this was a comfort: somewhere, the people we have lost are still alive. Then he saw the catch.</p>
+<div class="quote"><p class="fr">On ne peut pas s’avertir.</p><p>We cannot warn ourselves.</p><p class="src">The line Blanqui writes in the Prologue</p></div>
+<p>The doubles make the same mistakes we do, and no message can pass between them.</p>
+
+<h2>From doubles to copies</h2>
+<p>Modern physics has its own version of Blanqui. In a large enough universe, matter will now and then fall together by pure chance into any arrangement at all, including a whole person with a whole past they never lived. Physicists usually treat this as a sign that a theory has gone wrong. Inès Arrighi, the physicist at the centre of <i>Proofs</i>, has spent ten years arguing that it might mean something else.</p>
+<p>Then, one November morning, she finds herself standing barefoot in the street with a hot cup of tea, two years after her own death.</p>
+
+<h2>The question</h2>
+<p>If a perfect copy of you woke up tomorrow, with your body, your scars and every one of your memories, would it be you?</p>
+<p>Philosophers give three main kinds of answer:</p>
+<ul class="read">
+<li><b>Continuity.</b> You are the person each of whose moments grew out of the one before. The copy did not grow out of you. It is someone new.</li>
+<li><b>The body.</b> You are this living organism. Yours is in the ground. The copy is a different organism.</li>
+<li><b>The mind.</b> You are your memories, character and way of seeing. The copy has all of those. It is you.</li>
+</ul>
+<p>With one copy, these answers disagree, and no measurement, from the outside or from the inside, can tell you which is right. The copy feels exactly like you do. That is the problem.</p>
+
+<h2>Blanqui’s paradox</h2>
+<p>Here is the twist that Blanqui’s universe adds. The infinity that guarantees you will come back also guarantees you will come back many times at once. And one person cannot be identical to many people. So even the most generous answer, the mind, has to say no.</p>
+<table>
+<tr><th>Answer</th><th>One copy</th><th>Endless copies</th></tr>
+<tr><td>Continuity</td><td class="n">not you</td><td class="n">not you</td></tr>
+<tr><td>The body</td><td class="n">not you</td><td class="n">not you</td></tr>
+<tr><td>The mind</td><td class="y">you</td><td class="n">not you: you can’t be many</td></tr>
+</table>
+<p class="note">With one copy, the answers split. With endless copies, every answer agrees, each for its own reason.</p>
+<p>The condition that makes your return certain is the same condition that makes it fail.</p>
+<p><i>Proofs</i> doesn’t settle the question. It puts a woman inside it, and asks what she should do with the time she has.</p>
+
+<h2>Further reading</h2>
+<ul class="read">
+<li>Louis-Auguste Blanqui, <i>Eternity by the Stars: An Astronomical Hypothesis</i>, trans. Frank Chouraqui (Contra Mundum, 2013)</li>
+<li>Derek Parfit, <i>Reasons and Persons</i> (1984), on copies, teleporters and why identity may not be what matters</li>
+<li>Robert Nozick, <i>Philosophical Explanations</i> (1981), on the “closest continuer”</li>
+<li>Walter Benjamin, <i>The Arcades Project</i>, which rediscovered Blanqui’s book in the 1930s</li>
+</ul>
+
+<div class="end"><a href="index.html#ch-0">Read the Prologue</a><a href="forum.html">Discuss it in the forum</a></div>
+`,
+zh: `
+<p class="kick">《复本》背后的想法</p>
+<h1>牢房里的那个人</h1>
+
+<p>序章里的囚犯是路易-奥古斯特·布朗基（1805–1881），十九世纪法国最不肯低头的革命家。他一生中有三十多年在监狱里度过。1871年3月，就在他毕生为之准备的巴黎公社起义爆发的前一天，他被捕了，被押往布列塔尼莫尔莱湾的一座海上要塞：托罗堡。</p>
+<p>公社被镇压后的那几个月里，他在那里写了一本关于星辰的小书：<i>L’Éternité par les astres</i>（《由星辰而永恒》），1872年出版。《复本》的每一部，都以书中的一句话开篇。</p>
+
+<h2>他的论证</h2>
+<p>布朗基的推理很简单。宇宙由数量有限的元素构成，空间和时间却没有尽头。有限的零件在无限的空间里组合，新的组合迟早会用尽，于是开始重复。所以一切存在的东西，这颗星球、这个房间、你，都会在别处一模一样地再次存在，而且不止一次，是无穷无尽。</p>
+<p>他把这些重复叫作 <i>sosies</i>：分身。有的分身一模一样地过着你的人生，有的只差一个选择。他起初以为这是一种安慰：在某个地方，我们失去的人仍然活着。随后他看到了其中的陷阱。</p>
+<div class="quote"><p class="fr">On ne peut pas s’avertir.</p><p>我们无法警告自己。</p><p class="src">布朗基在序章里写下的那一句</p></div>
+<p>分身们犯着和我们一样的错误，而任何消息都无法在他们之间传递。</p>
+
+<h2>从分身到复本</h2>
+<p>现代物理学有自己版本的布朗基。在一个足够大的宇宙里，物质偶尔会纯粹出于偶然，落进任何一种排列，包括一个完整的人，连同一段她从未有过的过去。物理学家通常把这当作理论出了错的信号。《复本》的主人公、物理学家伊内丝·阿里吉，花了十年时间论证：它也许意味着别的东西。</p>
+<p>然后，在十一月的一个早晨，她光着脚站在了街上，手里的茶还是热的，而这是她死后两年。</p>
+
+<h2>那个问题</h2>
+<p>如果明天醒来一个完美的复本，有你的身体、你的伤疤、你的每一段记忆，那是你吗？</p>
+<p>哲学家大致给出三种回答：</p>
+<ul class="read">
+<li><b>连续性。</b>你是那个每一刻都从上一刻生长出来的人。复本不是从你生长出来的。它是一个新的人。</li>
+<li><b>身体。</b>你是这个活着的生物体。你的那一个已经入土。复本是另一个生物体。</li>
+<li><b>心智。</b>你是你的记忆、性格和看世界的方式。复本全都有。它就是你。</li>
+</ul>
+<p>只有一个复本时，这三种回答彼此矛盾，而没有任何测量，无论从外部还是从内部，能告诉你哪一种是对的。复本的感觉和你完全一样。问题正在这里。</p>
+
+<h2>布朗基悖论</h2>
+<p>布朗基的宇宙在这里加了一个转折。保证你会回来的那个无限，也保证你会同时回来许多次。而一个人不可能与许多人同一。所以，就连最宽厚的回答，心智，也只能说不。</p>
+<table>
+<tr><th>回答</th><th>一个复本</th><th>无数复本</th></tr>
+<tr><td>连续性</td><td class="n">不是你</td><td class="n">不是你</td></tr>
+<tr><td>身体</td><td class="n">不是你</td><td class="n">不是你</td></tr>
+<tr><td>心智</td><td class="y">是你</td><td class="n">不是你：你不可能是许多个</td></tr>
+</table>
+<p class="note">只有一个复本时，回答分歧。有无数复本时，每一种回答都一致，各有各的理由。</p>
+<p>让你的回归成为必然的那个条件，恰恰也是让它落空的条件。</p>
+<p>《复本》并不回答这个问题。它把一个女人放进这个问题里，然后问：她该如何度过她所拥有的时间。</p>
+
+<h2>延伸阅读</h2>
+<ul class="read">
+<li>路易-奥古斯特·布朗基，<i>L’Éternité par les astres</i>（1872）；英译本 <i>Eternity by the Stars</i>，Frank Chouraqui 译（Contra Mundum，2013）</li>
+<li>德里克·帕菲特，《理与人》（1984）：关于复制、传送与“同一性也许并不重要”</li>
+<li>罗伯特·诺齐克，《哲学解释》（1981）：关于“最近延续者”</li>
+<li>瓦尔特·本雅明，《拱廊计划》：二十世纪三十年代重新发现了布朗基的这本书</li>
+</ul>
+
+<div class="end"><a href="index.html#ch-0">阅读序章</a><a href="forum.html">到论坛讨论</a></div>
+`};
+const P=new URLSearchParams(location.search);
+let lang='en';
+try{ lang=localStorage.getItem('proofs.lang')||((navigator.language||'').toLowerCase().startsWith('zh')?'zh':'en'); }catch(e){}
+if(P.get('lang')==='zh'||P.get('lang')==='en') lang=P.get('lang');
+function render(){
+  document.documentElement.lang = lang==='zh'?'zh-CN':'en';
+  document.title = lang==='zh' ? '想法 · 复本' : 'The Idea · Proofs';
+  document.getElementById('brand').textContent = lang==='zh'?'复本':'Proofs';
+  document.getElementById('readLink').textContent = lang==='zh'?'阅读':'Read';
+  document.getElementById('body').innerHTML = C[lang];
+  document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
+}
+document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{ lang=b.dataset.lang; try{localStorage.setItem('proofs.lang',lang);}catch(e){} render(); }));
+render();
+})();
+</script>
+</body>
+</html>
